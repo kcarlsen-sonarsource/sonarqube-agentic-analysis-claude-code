@@ -178,18 +178,12 @@ The analyze, fix, and re-verify loop is complete. Claude caught and resolved the
 
 ## Step 6 — (Optional) Automatic verification with CLAUDE.md
 
-You can add a directive to your project's `CLAUDE.md` file that tells Claude to verify code after generating or modifying it, without needing a manual prompt. A ready-to-use version is included in this repo as [`CLAUDE.md`](CLAUDE.md):
+You can add a directive to your project's `CLAUDE.md` file that tells Claude to follow a full Guide-and-Verify workflow automatically, without needing a manual prompt. A ready-to-use version is included in this repo as [`CLAUDE.md`](CLAUDE.md). It covers both phases:
 
-```markdown
-## Code verification
+- **Guide phase:** Before generating code, Claude calls `get_guidelines` for project context, locates existing code with semantic search, checks architecture constraints, and validates dependencies for vulnerabilities.
+- **Verify phase:** After generating code, Claude runs `run_advanced_code_analysis` on every changed file, looks up flagged rules via `show_rule`, fixes CRITICAL and HIGH issues, and re-analyzes to confirm resolution.
 
-After generating or modifying code, verify it by calling
-`run_advanced_code_analysis` before committing.
-```
-
-This is a minimal version. The [official docs](https://docs.sonarsource.com/sonarqube-cloud/analyzing-source-code/agentic-analysis) provide a more complete "Guide-and-Verify" directive that also integrates Sonar Context Augmentation (calling `get_guidelines` and `search_by_signature_patterns` before writing code). Use the full docs directive for production setups.
-
-With this directive in place, Claude can verify code automatically as part of its generation workflow. You can refine the directive to scope it to specific directories, file types, or triggers.
+Copy the [`CLAUDE.md`](CLAUDE.md) from this repo into your project root. With this directive in place, Claude follows the Guide-and-Verify workflow automatically as part of its generation cycle. You can refine the directive to scope it to specific directories, file types, or triggers.
 
 ## Verify the setup
 
